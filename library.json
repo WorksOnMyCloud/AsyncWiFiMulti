@@ -1,0 +1,24 @@
+{
+  "name": "AsyncWiFiMulti",
+  "description": "Async WiFiMulti on ESP32",
+  "keywords": "wifi, wifimulti, async",
+  "repository":
+  {
+    "type": "git",
+    "url": "https://github.com/WorksOnMyCloud/AsyncWiFiMulti.git"
+  },
+  "authors":
+  [
+    {
+      "name": "AsyncWiFiMulti",
+      "maintainer": true
+    }
+  ],
+  "version": "0.0.0",
+  "license": "GPL-3.0-or-later",
+  "homepage": "https://github.com/WorksOnMyCloud/AsyncWiFiMulti",
+  "dependencies": {
+  },
+  "frameworks": "arduino",
+  "platforms": [ "espressif32" ]
+}
