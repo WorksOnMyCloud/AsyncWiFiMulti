@@ -8,7 +8,7 @@
 class AsyncWiFiMulti {
 
 public:
-  AsyncWiFiMulti();
+  AsyncWiFiMulti(unsigned long reconnect=1000);
   ~AsyncWiFiMulti();
   enum Status { Idle, Running, Connected };
 
@@ -29,7 +29,7 @@ public:
   };
  
   const ApSettings::List& getConfiguredAPs() const { return configuredAPs; }
-  const ApSettings::List& getFoundAPs() const { return foundAPs; } 
+  const ApSettings::List& getFoundAPs() const { return foundAPs; }
 
   using OnConnected = std::function<void(const ApSettings&)>;
   using OnFailure = std::function<void()>;
@@ -50,6 +50,7 @@ public:
   const char *statusString();
 
 private:
+  unsigned long reconnectDelay = 0;
   Status _status = Idle;
   ApSettings::List configuredAPs;
   ApSettings::List foundAPs;
@@ -63,6 +64,10 @@ private:
   void onScanDone(const wifi_event_sta_scan_done_t &scanInfo);
   void onFailure();
   void tryNextAP();
+
+  void onConnectedDefault(const ApSettings&);
+  void onFailureDefault();
+  void onDisconnectedDefault(const char *ssid, uint8_t disconnectionReason);
   
   wifi_event_id_t event_id = 0;
 };

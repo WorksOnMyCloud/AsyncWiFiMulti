@@ -6,11 +6,42 @@
 
 using namespace std::placeholders;
 
-AsyncWiFiMulti::AsyncWiFiMulti() {
+AsyncWiFiMulti::AsyncWiFiMulti(unsigned long reconnect) {
+
+  reconnectDelay=reconnect;
+  if (reconnectDelay) {
+    onConnected([this](const AsyncWiFiMulti::ApSettings &ap) {
+      this->onConnectedDefault(ap);
+    });
+
+    onFailure([this]() {
+      this->onFailureDefault();
+    });
+
+    onDisconnected([this](const char *ssid, uint8_t disconnectionReason) {
+      this->onDisconnectedDefault(ssid, disconnectionReason);
+    });
+  }
 }
 
 AsyncWiFiMulti::~AsyncWiFiMulti() {
   WiFi.removeEvent(event_id);
+}
+
+void AsyncWiFiMulti::onConnectedDefault(const AsyncWiFiMulti::ApSettings& ap) {
+  printf("Connected to [" _MAC_ "] %s\n",
+    ap.bssid[0], ap.bssid[1], ap.bssid[2], ap.bssid[3], ap.bssid[4], ap.bssid[5],
+    ap.ssid.c_str());
+}
+
+void AsyncWiFiMulti::onFailureDefault() {
+  delay(reconnectDelay); 
+  start();
+}
+
+void AsyncWiFiMulti::onDisconnectedDefault(const char *ssid, uint8_t disconnectionReason) {
+  delay(reconnectDelay); 
+  start();
 }
 
 bool AsyncWiFiMulti::addAP(const char *ssid, const char *passphrase) {
