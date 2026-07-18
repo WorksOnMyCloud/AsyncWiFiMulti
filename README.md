@@ -22,8 +22,10 @@ to the `lib_deps` section of your project.
 Adds an access point to the configuration. Returns `true` if adding was successful, `false` if the AP SSID/passphrase are not valid, or if the AP is already present.
 
 ```
-    bool start();
+    bool start(ms)
 ```
+Starts background connection, ms is delay for retries (default 1000ms), implemented using default callbacks.
+
 
 ### Callbacks signature
 
